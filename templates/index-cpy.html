@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DOC_CHAT</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+    body {
+      background-color: #3c87ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    .container {
+      background-color: #ffffff;
+      width: 90%;
+      max-width: 80em;
+      height: 80vh;
+      overflow: hidden;
+      border-radius: 0.43em;
+      box-shadow: 0 1.25em 2.18em rgba(1, 28, 71, 0.3);
+      display: flex;
+    }
+    .file-upload {
+      width: 35%;
+      padding: 3.12em 1.25em;
+      border-right: 1px solid #ccc;
+      overflow-y: auto;
+    }
+    .file-upload .label-button {
+      display: block;
+      background-color: #025bee;
+      color: #ffffff;
+      font-size: 1.12em;
+      font-weight: 500;
+      text-align: center;
+      width: 100%;
+      padding: 1.12em 0;
+      margin-bottom: 1rem;
+      border-radius: 0.31em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .file-upload .label-button:hover {
+      background-color: #0145a0;
+    }
+    input[type="file"] {
+      display: none;
+    }
+    #num-of-files {
+      font-weight: 400;
+      text-align: center;
+      margin-bottom: 1.87em;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    .file-upload li {
+      font-weight: 500;
+      background-color: #eff5ff;
+      color: #025bee;
+      margin-bottom: 1em;
+      padding: 1.1em 1em;
+      border-radius: 0.3em;
+      display: flex;
+      justify-content: space-between;
+    }
+    .response-container {
+      width: 65%;
+      padding: 3.12em 1.25em;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+    }
+    .response-container .input-group {
+      margin-top: 30px;
+      display: flex;
+      align-items: center;
+    }
+    .response-container #text-input {
+      flex-grow: 1;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 0.3em;
+    }
+    .response-container #send-button {
+      display: flex;
+      background-color: #025bee;
+      color: #ffffff;
+      font-size: 1.12em;
+      font-weight: 500;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+      padding: 1.12em 1.5em;
+      margin-left: 1rem;
+      height: 10px;
+      border-radius: 0.31em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .response-container #send-button:hover {
+      background-color: #0145a0;
+    }
+    .response-container #response {
+      flex-grow: 1;
+      margin-top: 1rem;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 0.3em;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="file-upload">
+      <input type="file" id="file-input" multiple />
+      <label for="file-input" class="label-button">
+        <i class="fa-solid fa-arrow-up-from-bracket"></i>
+        Choose Files To Upload
+      </label>
+      <div id="num-of-files">No Files Chosen</div>
+      <ul id="files-list"></ul>
+      <button id="proceed-button" class="label-button">Process PDF</button>
+      <button class="label-button">Clear DATA</button>
+    </div>
+    <div class="response-container">
+      <div id="response">
+      </div>
+
+      <div class="input-group">
+        <input type="text" id="text-input" placeholder="Enter your QUERY ....">
+        <button id="send-button">ASK</button>
+      </div>
+    </div>
+  </div>
+    <script> 
+        let fileInput = document.getElementById("file-input");
+        let fileList = document.getElementById("files-list");
+        let numOfFiles = document.getElementById("num-of-files");
+
+        fileInput.addEventListener("change", () => {
+        fileList.innerHTML = "";
+        numOfFiles.textContent = `${fileInput.files.length} Files Selected`;
+
+        for (i of fileInput.files) {
+            let reader = new FileReader();
+            let listItem = document.createElement("li");
+            let fileName = i.name;
+            console.log(i);
+            let fileSize = (i.size / 1024).toFixed(1);
+            listItem.innerHTML = `<p>${fileName}</p><p>${fileSize}KB</p>`;
+            if (fileSize >= 1024) {
+            fileSize = (fileSize / 1024).toFixed(1);
+            listItem.innerHTML = `<p>${fileName}</p><p>${fileSize}MB</p>`;
+            }
+            fileList.appendChild(listItem);
+        }
+        });
+
+        document.getElementById('proceed-button').addEventListener('click', function() {
+        var fileInput = document.getElementById('file-input');
+        var formData = new FormData();
+        for (var i = 0; i < fileInput.files.length; i++) {
+            formData.append('files', fileInput.files[i]);
+        }
+
+        fetch('/upload_files', {
+            method: 'POST',
+            body: formData
+        })
+        // .then(response => response.json())
+        .then(data => {
+            // document.getElementById('file-paths').textContent = `Uploaded file paths: ${data.file_paths.join(', ')}`;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+        });
+
+        document.getElementById('send-button').addEventListener('click', function() {
+        var text = document.getElementById('text-input').value;
+        fetch('/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ text: text })
+        }).then(response => response.text())
+        .then(data => {
+            document.getElementById('response').innerText = data;
+        })
+        .catch(error => console.error(error));
+        });
+    </script>
+  </body>
+</html>
