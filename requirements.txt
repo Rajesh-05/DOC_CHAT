@@ -1,0 +1,5 @@
+langchain==0.0.229 
+langchainplus-sdk==0.0.20 
+pydantic==1.10.9 
+pydantic-core==2.1.2
+groq
