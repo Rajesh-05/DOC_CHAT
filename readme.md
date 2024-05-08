@@ -20,14 +20,14 @@ https://drive.google.com/file/d/1JliIfZPSzx0518QIQ80jiIBHZH3ZRYrm/view?usp=shari
 To set up Doc_chat on your local machine, follow these steps:
 1. Clone the repository:
 
-```git clone https://github.com/yourusername/Doc_chat.git```
+    ```git clone https://github.com/yourusername/Doc_chat.git```
 
 2. Navigate to the project directory:
 
-```cd DOC_CHAT```
+    ```cd DOC_CHAT```
 
 3. Install the required dependencies:
 
-```pip install -r requirements.txt```
+    ```pip install -r requirements.txt```
 
-4. Run app.ipynb
+That's IT !! You are ready to ROCK !!!
