@@ -134,7 +134,7 @@
       <div id="num-of-files">No Files Chosen</div>
       <ul id="files-list"></ul>
       <button id="proceed-button" class="label-button">Process PDF</button>
-      <button class="label-button">Clear DATA</button>
+      <button id="clear-button" class="label-button">Clear DATA</button>
     </div>
     <div class="response-container">
       <div id="response">
@@ -147,6 +147,13 @@
     </div>
   </div>
     <script> 
+
+      fetch('/clear', {
+        method: 'POST',
+      })
+      .then(response => response.text())
+      .then(message => console.log(message));
+
         let fileInput = document.getElementById("file-input");
         let fileList = document.getElementById("files-list");
         let numOfFiles = document.getElementById("num-of-files");
@@ -192,6 +199,7 @@
 
         document.getElementById('send-button').addEventListener('click', function() {
         var text = document.getElementById('text-input').value;
+        document.getElementById('text-input').value = "" ;
         fetch('/send', {
             method: 'POST',
             headers: {
@@ -204,6 +212,17 @@
         })
         .catch(error => console.error(error));
         });
+        document.getElementById('clear-button').addEventListener('click', function() {
+          fileList.innerHTML = "";
+        numOfFiles.textContent = `No Files Chosen`;
+        document.getElementById('response').innerText = "";
+
+      fetch('/clear', {
+        method: 'POST',
+      })
+      .then(response => response.text())
+      .then(message => console.log(message));
+    });
     </script>
   </body>
 </html>
